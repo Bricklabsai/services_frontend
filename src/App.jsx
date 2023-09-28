@@ -1,11 +1,9 @@
-import React from 'react'
+import Home from '../components/home'
 
-function App() {
+export default function App() {
   return (
-    <div className='bg-red-49 underline shadow-lg'>
-      hello papa farm
+    <div>
+      <Home />
     </div>
   )
 }
-
-export default App
