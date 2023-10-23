@@ -8,7 +8,13 @@ function Footer() {
             <div className="md:flex md:justify-between">
             <div className="mb-6 md:mb-0">
                 <a href="https://Bricklabsai.com/" className="flex items-center">
-                    <Image src="https://flowbite.com/docs/images/logo.svg" className="h-8 mr-3" alt="FlowBite Logo" />
+                <Image 
+                    src="https://flowbite.com/docs/images/logo.svg" 
+                    alt="FlowBite Logo" 
+                    width={100}  
+                    height={32}  
+                    className="h-8 mr-3" 
+                />
                     <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Bricklabsai</span>
                 </a>
             </div>
