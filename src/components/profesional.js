@@ -3,7 +3,7 @@
 
 import Image from "next/image";
 import React from "react";
-import Map from '@/assets/world_map.0320de77.png'
+import Group from '@/assets/group.2700ddbe.png'
 
 
 
@@ -12,7 +12,7 @@ export default function AvailabilitySection() {
     <div className="flex items-center justify-center dark:bg-gray-900 py-20 px-8 md:px-20 space-y-10 md:space-y-0 md:space-x-20">
       <div className="flex-1 relative w-full h-96 z-10">
         {/* Adjust the path to your local image */}
-        <Image src={Map} layout="fill" objectFit="cover" alt="Services illustration" />
+        <Image src={Group} layout="fill" objectFit="cover" alt="Services illustration" />
       </div>
       <div className="flex-1 flex flex-col space-y-6">
         <div className="flex items-center space-x-3">

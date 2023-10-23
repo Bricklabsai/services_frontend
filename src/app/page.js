@@ -6,7 +6,7 @@ import AvailabilitySection from '@/components/availability'
 
 export default function Home() {
   return (
-    <div>
+    <div className='z-0'>
       <Nav />
       {/* <Footer/> */}
       <Hero />
