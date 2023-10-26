@@ -3,10 +3,62 @@
 import React from 'react'
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-
+import { useFormik } from 'formik'
+import * as yup from 'yup'
+import { useDispatch, useSelector } from "react-redux";
+import { resetUserStateValues, signin } from "../../../../redux/slices/auth/authSlice";
 
 function Page() {
     const router = useRouter(); 
+    const dispatch = useDispatch()
+
+    // handle submit
+    const submitLoginDetails = (values, actions) => {
+        dispatch(signin({
+            email: values.email,
+            password: values.password
+        }))
+   
+        // router.replace('/dashboard')
+    }
+
+    // retrieve data from store
+    const { user, isUserLoading, isUserError, isUserSuccess, isUserMessage } = useSelector((state) => state.auth)
+
+    // console.log(isUserMessage)
+
+    // handle user object changes
+    useEffect(() => {
+        if(isUserError){
+            toast.error(isUserMessage, {
+                position: 'top-center',
+                // autoClose: false
+            })
+        }
+
+        if(isUserSuccess && user){
+            router.replace('/dashboard')
+        }
+
+        dispatch(resetUserStateValues())
+    }, [isUserError, isUserSuccess, isUserMessage, user, dispatch, router])
+
+    // validation schema
+    const loginSchema = yup.object().shape({
+        email: yup.string().email('Invalid email address').required('Email is required'),
+        password: yup.string().required('Password is required')
+    })
+
+    // formik form validation
+    const { values, handleChange, handleSubmit } = useFormik({
+        initialValues: {
+            email: '',
+            password: ''
+        },
+        validationSchema: loginSchema,
+        onSubmit: submitLoginDetails
+    })
+
 
     const handleRegisterClick = () => {
         router.push('/auth/register');
@@ -24,19 +76,35 @@ function Page() {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                   Sign in to your account
               </h1>
-              <form className="space-y-4 md:space-y-6" action="#">
+              <form  onSubmit={handleSubmit} className="space-y-4 md:space-y-6" action="#">
                   <div>
                       <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                      <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required=""/>
+                      <input 
+                            type="email" 
+                            name="email" 
+                            id="email" 
+                            value={values.email} 
+                            onChange={handleChange} 
+                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required=""/>
                   </div>
                   <div>
                       <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                      <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required=""/>
+                      <input type="password"
+                             name="password"
+                             id="password" 
+                             placeholder="••••••••" 
+                             value={values.password} 
+                             onChange={handleChange} 
+                             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required=""/>
                   </div>
                   <div className="flex items-center justify-between">
                       <div className="flex items-start">
                           <div className="flex items-center h-5">
-                            <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required=""/>
+                            <input 
+                                id="remember" 
+                                aria-describedby="remember" 
+                                type="checkbox" 
+                                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required=""/>
                           </div>
                           <div className="ml-3 text-sm">
                             <label for="remember" className="text-gray-500 dark:text-gray-300">Remember me</label>
